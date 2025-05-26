@@ -81,82 +81,51 @@ Berikut adalah deskripsi dari masing-masing fitur (variabel) dalam dataset `Air 
 ### Exploratory Data Analysis 
 1. Informasi dataset
    <br>![Informasi dataset](img/df_info.png)
-   - Ada 100.000 baris dalam dataset.
-   - Terdapat 9 kolom yaitu: gender, age, hypertension, heart_disease, smoking_history, bmi, HbA1c_level, blood_glucose_level, dan diabetes.
-3. Memeriksa dan menangani duplikat data pada dataset
-   <br>![data duplikat](img/duplikat.png)
-   <br>Terlihat bahwa terdapat data duplikat pada dataset ini, sehingga data duplikat tersebut perlu dihapus agar tidak ada data redudan.
-5. Deskripsi statistik fitur numerik dataset
+   - Ada 5000 baris dalam dataset.
+   - Terdapat **10 kolom** fitur:
+      1. `Temperature` (float64)
+      2. `Humidity` (float64)
+      3. `PM2.5` (float64)
+      4. `PM10` (float64)
+      5. `NO2` (float64)
+      6. `SO2` (float64)
+      7. `CO` (float64)
+      8. `Proximity_to_Industrial_Areas` (float64)
+      9. `Population_Density` (float64)
+      10. `Air Quality` (object - target variabel)
+    - Tidak terdapat nilai kosong (semua kolom memiliki 5000 non-null entries).
+2. Deskripsi statistik fitur numerik dataset
    <br>![statistik](img/describe.png)
-6. Memeriksa dan menangani missing value
-   <br>![image](img/missing_value1.png)
-   <br>Tidak terdapat missing value secara eksplisit, tetapi ketika diperiksa, salah satu kategori smoking_history adalah No Info yang mengindikasikan missing value. Hal di atas dilakukan agar 'No Info' pada kolom smoking_history dapat diperlakukan sebagai missing value secara eksplisit. Hal ini dapat memudahkan proses imputasi atau penanganan missing value di tahap berikutnya. 
-   <br>![image](img/missing_value2.png)
-   <br>Selanjutnya mengisi missing value pada kolom smoking_history dengan label 'Missing' sebagai kategori khusus untuk memudahkan proses encoding dan memastikan semua data tetap digunakan dalam modeling. Tujuannya adalah agar siap untuk proses encoding dan tidak menghilangkan data.
-8. Memeriksa dan menangani outliers
-   - `age`
-     <br>![age](img/eda-age.png)
-   - `hypertension`
-     <br>![hypertension](img/eda-hypertension.png)
-   - `heart_disease`
-     <br>![heart_disease](img/eda-heart_disease.png)
-   - `bmi`
-     <br>![bmi](img/eda-bmi.png)
-   - `HbA1c_level`
-     <br>![HbA1c_level](img/eda-HbA1c_level.png)
-   - `blood_glucose_level`
-     <br>![blood_glucose_level](img/eda-blood_glucose_level.png)
-   <br> Visualisasi menunjukkan bahwa 'bmi', 'HbA1c_level', 'blood_glucose_level' terdapat outliers sehingga perlu ditangani.
-   <br> Menangani outlier dengan IQR Method, dimana:
-   - Kuartil:
-    <br>Q1 (Kuartil 1) = nilai pada persentil ke-25
-    <br>Q3 (Kuartil 3) = nilai pada persentil ke-75
-   - IQR (Interquartile Range):
-    <br>IQR = Q3 - Q1
-   - Batas Outlier:
-    <br>Lower Bound = Q1 - 1.5 × IQR
-    <br>Upper Bound = Q3 + 1.5 × IQR
-9. Univariate Analysis
-   <br>Melakukan proses analisis data dengan teknik Univariate EDA. Dimana disini data akan dibagi menjadi dua bagian, yaitu numerical features dan categorical. Visualisasi pada bagian ini menunjukkan distribusi masing-masing fitur pada dataset.
-   - Fitur kategorikal
-     - `gender`
-       
-     |  **gender**   | **jumlah sampel**           | **persentase**        |
-     | ---------------| ----------------------------|----------------------|
-     | Female |51179| 58.0 |
-     | Male |369998| 42.0 |
-     | Other |18| 0.0 |
+   <br>Berdasarkan deskripsi statistik, dataset ini memiliki 8 fitur numerik dengan sebaran nilai yang cukup bervariasi. Rata-rata suhu berada di kisaran 30°C, dengan kelembapan sekitar 70%. Konsentrasi PM2.5 dan PM10 menunjukkan nilai maksimum yang cukup tinggi, mengindikasikan potensi outlier. Nilai-nilai untuk gas pencemar seperti NO2, SO2, dan CO juga menunjukkan variasi yang signifikan. Fitur Proximity to Industrial Areas dan Population Density memiliki distribusi yang relatif normal namun tetap menunjukkan rentang nilai yang lebar, menandakan keragaman kondisi lingkungan dalam dataset.
 
-     <br>![cat_features](img/eda-cat_features.png)
-     
-     - `smoking_history`
-     
-     |  **smoking_history**   | **jumlah sampel**           | **persentase**        |
-     | ---------------| ----------------------------|----------------------|
-     |never              |      31249   |     35.4|
-     |Missing             |     31111   |    35.3|
-     |current              |     8349   |    9.5|
-     |former             |       8133   |      9.2|
-     |not current         |      5764   |      6.5|
-     |ever                 |     3589   |      4.1|
+3. Visualisasi Kategori Udara 
+<br>![statistik](img/Distribusi_Kategori.png)
+**Insight:**
+- Grafik distribusi menunjukkan bahwa sebagian besar kualitas udara berada pada kategori Good dan Moderate, sementara Poor dan Hazardous relatif sedikit. Ketidakseimbangan ini penting diperhatikan, terutama jika data akan digunakan untuk klasifikasi, karena bisa memengaruhi kinerja model. Temuan ini juga membuka peluang analisis lanjutan berdasarkan waktu atau lokasi.
+Visualisasi boxplot menunjukkan adanya outlier pada variabel pm10 (242), so2 (46), co (248), o3 (188), dan no2 (198), namun outlier ini masih berada dalam rentang normal berdasarkan distribusi data, sehingga tidak perlu dihapus. Untuk analisis selanjutnya, akan digunakan model Random Forest (RF) dan XGBoost, yang dikenal robust terhadap outlier, sehingga potensi dampak dari nilai ekstrem dalam dataset dapat diminimalkan secara alami oleh model.
 
-     <br>![smoking_history](img/eda-smoking_history.png)
-   - Fitur numerik
-     <br>![num_features](img/eda-num_features.png)
-10. Multivariate Analysis
-   <br>Pada tahapan ini melakukan analisis data pada fitur kategori dan numerik terhadap target (diabetes).
-   - Fitur kategorikal
-     <br>![cat_corr](img/eda-cat_corr.png)
-     <br>Gender tampaknya memiliki pengaruh terhadap prevalensi diabetes, dengan laki-laki menunjukkan kecenderungan lebih tinggi terkena diabetes dibanding perempuan.
-     <br>![multivariate_smoking](img/multivariate_smoking.png)
-     <br>Riwayat merokok berhubungan dengan prevalensi diabetes. Mantan perokok memiliki risiko tertinggi, yang bisa jadi disebabkan oleh dampak kumulatif merokok di masa lalu.
-     
-   - Fitur numerik
-     <br>![num_corr](img/eda-num_corr.png)
-     <br>Pada pola sebaran data grafik pairplot, terlihat bahwa age, HbA1c_level, blood_glucose_level, dan bmi memiliki korelasi yang cukup kuat dengan fitur target diabetes.
-     <br>![corr_matrix](img/eda-corr_matrix.png)
-     <br>Terlihat bahwa fitur HbA1c_level, age, dan blood_glucose_level memiliki korelasi yang cukup berarti dengan diabetes. Sementara itu, fitur bmi, heart_disease, dan hypertension memiliki korelasi yang cukup lemah terhadap target.
+![dist](https://github.com/user-attachments/assets/5430adf7-7d1e-44b0-97b1-5a99528fce5b)
 
+Gambar tersebut merupakan grafik visualisasi dari distribusi kolom kategori pada dataset. Pada sumbu horizontal (x-axis), terdapat kategori kualitas udara, yaitu ‘SEDANG’, ‘BAIK’, ‘TIDAK SEHAT’, ‘SANGAT TIDAK SEHAT’, ‘BERBAHAYA’, dan ‘TIDAK ADA DATA’. Sementara itu, sumbu vertikal (y-axis) menunjukkan jumlah kemunculan masing-masing kategori dalam 
+dataset. Dari grafik, dapat disimpulkan bahwa: 
+1. Kategori sedang memiliki jumlah data tertinggi. 
+2. Kategori tidak sehat merupakan kategori kedua terbanyak. 
+3. Kategori baik, sangat tidak sehat, dan berbahaya memiliki jumlah data 
+yang jauh lebih rendah. 
+4. Kategori tidak ada data mencerminkan adanya data yang tidak memiliki 
+informasi terkait kategori kualitas udara. 
+5. Kategori tidak ada data dan berbahaya memiliki jumlah data yang sangat 
+sedikit. Sehingga diputuskan untuk menghapus kategori berbahaya.
+
+![corr](https://github.com/user-attachments/assets/c881bf1c-df3f-46de-a198-02fd30df1f28)
+
+Gambar yang ditampilkan di atas adalah heatmap korelasi antar polutan udara, yang menunjukkan hubungan linear antara setiap pasangan variabel polutan seperti pm2.5, pm10, so2, co, o3, dan no2. Nilai korelasi berkisar dari -1 hingga 1, di mana:
+
+1. Nilai mendekati 1 menunjukkan korelasi positif kuat (jika satu naik, yang lain juga cenderung naik),
+2. Nilai mendekati -1 menunjukkan korelasi negatif kuat (jika satu naik, yang lain cenderung turun),
+3. Nilai mendekati 0 menunjukkan korelasi lemah atau tidak ada korelasi linear.
+
+   
 ## Data Preparation
 Pada bagian ini akan dilakukan 3 tahap persiapan data, yaitu:
 1. Encoding Fitur Kategori
