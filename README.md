@@ -241,24 +241,6 @@ svm_pipeline = Pipeline([
 
 ---
 
-### 🏆 Pemilihan Model Terbaik
-
-Berdasarkan hasil evaluasi model pada metrik **accuracy**, **precision**, **recall**, **f1-score**, dan **ROC AUC**, model **XGBoost** menunjukkan performa terbaik dengan nilai:
-
-- **Accuracy**: 0.961
-- **Precision**: 0.96148
-- **Recall**: 0.961
-- **F1 Score**: 0.961141
-- **ROC AUC**: 0.99663
-
-### 📌 Kesimpulan:
-Model **XGBoost** dipilih sebagai **model terbaik** karena:
-- Memiliki **akurasi dan presisi tertinggi** dibanding Random Forest dan SVM.
-- Memberikan **keseimbangan yang baik antara recall dan precision** (dibuktikan melalui f1-score tertinggi).
-- Performa **ROC AUC yang sangat tinggi** menunjukkan kemampuan klasifikasi yang sangat baik pada seluruh threshold.
-- Cocok untuk masalah klasifikasi multi-kelas dan kompleks seperti kualitas udara.
-
-
 ## Evaluation
 **Metrik yang Digunakan**
 1. Accuracy, yaitu persentase prediksi yang benar terhadap seluruh data.
@@ -339,7 +321,6 @@ Hal ini menjawab **Solution Statement** dengan memberikan wawasan penting kepada
 Model Random Forest terbukti paling efektif untuk tugas klasifikasi kualitas udara karena:
 
 - Akurasi tinggi dan kinerja seimbang di semua kelas.
-- Interpretasi yang baik melalui feature importance.
 - Mendukung kebutuhan lembaga lingkungan dan masyarakat umum untuk memahami informasi kualitas udara secara akurat dan mudah.
 
 Model ini menjawab seluruh aspek dari **Problem Statements**, **Goals**, dan **Solution Statements** proyek ini secara komprehensif.
