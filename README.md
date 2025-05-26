@@ -285,19 +285,19 @@ $$
 
 Metrik-metrik ini dipilih karena sesuai dengan konteks permasalahan klasifikasi multi-kelas. Akurasi digunakan untuk melihat secara umum seberapa banyak prediksi model yang benar dibandingkan dengan jumlah data keseluruhan. Namun, karena dalam data terdapat kemungkinan ketidakseimbangan antar kelas, maka precision dan recall digunakan untuk memberikan penilaian yang lebih rinci per kelas. Precision mengukur seberapa tepat model dalam memberikan label suatu kategori, sementara recall menunjukkan seberapa baik model dalam menangkap semua data yang memang termasuk dalam kategori tersebut. F1-score kemudian digunakan sebagai keseimbangan antara precision dan recall, khususnya berguna saat kita ingin menghindari ketimpangan antara keduanya.
   
-🔍 Evaluasi Akhir dan Pemilihan Model Terbaik
+### 🔍 Evaluasi Akhir dan Pemilihan Model Terbaik
 
-Pada tahapan evaluasi, **model Random Forest** dipilih sebagai **model terbaik** karena menunjukkan performa yang sangat baik dalam memprediksi kualitas udara berdasarkan metrik evaluasi utama. Model ini memperoleh:
+Pada tahapan evaluasi, **model XGBoost** dipilih sebagai **model terbaik** karena menunjukkan performa paling tinggi dalam memprediksi kualitas udara berdasarkan seluruh metrik evaluasi utama. Model ini memperoleh:
 
-- **Accuracy**: 0.96  
-- **Precision**: 0.9601  
-- **Recall**: 0.96  
-- **F1-score**: 0.9600  
-- **ROC-AUC**: 0.9967  
+- **Accuracy**: 0.961  
+- **Precision**: 0.9615  
+- **Recall**: 0.961  
+- **F1-score**: 0.9611  
+- **ROC-AUC**: 0.9966  
 
-Hasil ini menunjukkan bahwa Random Forest mampu mengklasifikasikan kualitas udara dengan sangat baik di semua kelas, termasuk kelas minoritas. Model ini menjawab **Problem Statement 1** dan **Goal 1**, yaitu menyediakan solusi berbasis machine learning yang akurat dan andal dalam memprediksi kategori kualitas udara (*Good*, *Moderate*, *Poor*, dll.) berdasarkan parameter lingkungan seperti polutan (PM2.5, PM10, NO₂, SO₂, CO), suhu, dan kelembaban.
+Hasil ini menunjukkan bahwa XGBoost mampu mengklasifikasikan kualitas udara dengan sangat baik di semua kelas, termasuk kelas minoritas, dan menunjukkan **keseimbangan optimal antara precision dan recall**. Model ini menjawab **Problem Statement 1** dan **Goal 1**, yaitu menyediakan solusi berbasis machine learning yang akurat dan andal dalam memprediksi kategori kualitas udara (*Good*, *Moderate*, *Poor*, dll.) berdasarkan parameter lingkungan seperti polutan (PM2.5, PM10, NO₂, SO₂, CO), suhu, dan kelembaban.
 
-Selain itu, model ini dibandingkan dengan dua algoritma lain sesuai dengan **Problem Statement 2** dan **Goal 2**, yakni **XGBoost** dan **SVM**. Hasil evaluasi menunjukkan:
+Selain itu, model ini dibandingkan dengan dua algoritma lain sesuai dengan **Problem Statement 2** dan **Goal 2**, yakni **Random Forest** dan **SVM**. Hasil evaluasi menunjukkan:
 
 | **Metrik**    | **Random Forest** | **XGBoost** | **SVM**  |
 | ------------- | ----------------- | ----------- | -------- |
@@ -307,25 +307,25 @@ Selain itu, model ini dibandingkan dengan dua algoritma lain sesuai dengan **Pro
 | F1-score      | 0.9600            | 0.9611      | 0.9419   |
 | ROC-AUC       | 0.9967            | 0.9966      | 0.9952   |
 
-Meskipun **XGBoost** memiliki metrik yang sedikit lebih tinggi, **Random Forest** dipilih karena:
+Meskipun perbedaan performa dengan Random Forest sangat tipis, **XGBoost** dipilih karena:
 
-- Lebih stabil dan cepat dalam pelatihan.
-- Memiliki interpretabilitas yang lebih tinggi dalam hal **feature importance**.
-- Menghasilkan performa tinggi tanpa tuning parameter yang kompleks.
-
+- Konsisten memberikan metrik tertinggi di semua aspek evaluasi.
+- Memiliki kemampuan generalisasi yang sangat baik dan efisiensi dalam menangani kompleksitas data.
+- Memberikan fitur regularisasi yang mengurangi risiko overfitting.
 
 Hal ini menjawab **Solution Statement** dengan memberikan wawasan penting kepada pengambil kebijakan mengenai sumber polusi yang paling signifikan, sehingga dapat menjadi dasar dalam menetapkan prioritas pengendalian emisi.
 
 ### ✅ Kesimpulan
 
-Model Random Forest terbukti paling efektif untuk tugas klasifikasi kualitas udara karena:
+Model **XGBoost** terbukti paling efektif untuk tugas klasifikasi kualitas udara karena:
 
 - Akurasi tinggi dan kinerja seimbang di semua kelas.
 - Mendukung kebutuhan lembaga lingkungan dan masyarakat umum untuk memahami informasi kualitas udara secara akurat dan mudah.
+- Memberikan hasil evaluasi terbaik tanpa kompromi pada performa atau generalisasi.
 
 Model ini menjawab seluruh aspek dari **Problem Statements**, **Goals**, dan **Solution Statements** proyek ini secara komprehensif.
 
-Kesimpulan akhir:
-<br>Model Random Forest dengan hyperparameter tuning adalah pilihan paling tepat sebagai model terbaik, karena memberikan keseimbangan performa terbaik dan hasil evaluasi yang unggul secara umum. Pemilihan metrik seperti F1-score dan ROC-AUC yang lebih representatif daripada sekadar akurasi sangat penting dalam konteks ini, terutama jika data tidak seimbang atau konsekuensi kesalahan klasifikasi berbeda antara kelas.
+Kesimpulan akhir:  
+**XGBoost** adalah pilihan paling tepat sebagai model terbaik, karena memberikan keseimbangan performa terbaik dan hasil evaluasi yang unggul secara umum. Pemilihan metrik seperti F1-score dan ROC-AUC yang lebih representatif daripada sekadar akurasi sangat penting dalam konteks ini, terutama jika data tidak seimbang atau konsekuensi kesalahan klasifikasi berbeda antara kelas.
 
 
