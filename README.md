@@ -122,7 +122,18 @@ Matriks korelasi di atas menunjukkan hubungan linier antar variabel numerik dala
 Setelah melalui tahap pembersihan data (data cleaning) yang mencakup penanganan missing values dan deteksi outlier, langkah selanjutnya adalah mempersiapkan data untuk proses pelatihan model. Pada tahap ini, dilakukan pemisahan antara fitur dan target variabel. Kolom 'Air Quality' dipilih sebagai target karena merepresentasikan kualitas udara yang ingin diprediksi. Sementara itu, seluruh kolom lainnya digunakan sebagai fitur atau variabel independen yang menjadi input bagi model. Pada kode dibawah juga terdapat encoding terhadap fitur target agar menjadi numerik supaya dapat diproses oleh algoritma
 Pada bagian ini akan dilakukan 2 tahap persiapan data, yaitu:
 1. Encoding Fitur Kategori
-   <br>Mengubah data kategorik menjadi numerik agar bisa diproses oleh algoritma machine learning, dalam kasus ini menggunakan One-Hot Encoding dan Label Encoding. Karena algoritma machine learning pada umumnya hanya dapat memproses data numerik, sehingga untuk memudahkan proses pemodelan, data kategorik harus diencoding.
+   <br>Mengubah data kategorik menjadi numerik agar bisa diproses oleh algoritma machine learning, dalam kasus ini menggunakan Label Encoding. Karena algoritma machine learning pada umumnya hanya dapat memproses data numerik, sehingga untuk memudahkan proses pemodelan, data kategorik harus diencoding.
+<br>Pada kasus ini, yang dilakukan encoding adalah label target yaitu "Air Quality", yang memiliki beberapa kelas yaitu Moderate,Good,Hazardous dan Pooor. Dengan menggunakan Label Encoding, setiap kelas tersebut diubah menjadi angka. Yaitu:
+
+Moderate→ 0
+
+Good → 1
+
+Hazardous → 2
+
+Poor → 3
+
+<br>Proses ini penting agar model machine learning dapat mengenali dan mempelajari pola dari target klasifikasi tersebut.
    <br>![image](img/Data_encodinng.png)
 
 2. Train-Test-Split
@@ -152,7 +163,12 @@ rf_pipeline = Pipeline([
   - Melatih model menggunakan data yang telah distandarisasi.
 - Parameter:
   - `random_state=42`: Menetapkan seed agar hasil replikasi konsisten
-
+- Penjelasan Cara Kerja Random Forest:
+  - Random Forest adalah algoritma machine learning yang termasuk ke dalam metode ensemble learning, khususnya teknik bagging (Bootstrap Aggregating). Algoritma ini membangun banyak pohon keputusan (decision trees) pada berbagai subset data pelatihan dan menggabungkan hasilnya (melalui voting untuk klasifikasi) untuk meningkatkan akurasi dan mengurangi overfitting.
+  - Decision Tree: Masing-masing pohon keputusan dalam Random Forest belajar dari subset data yang diambil secara acak dan melakukan prediksi secara independen.
+  - Bagging: Teknik ini mengambil sampel data secara acak dengan pengembalian (bootstrap), melatih banyak model, dan menggabungkan prediksi mereka untuk menghasilkan hasil yang lebih stabil dan akurat.
+  - Ensemble: Dengan menggabungkan banyak model lemah (weak learners), Random Forest menghasilkan model yang kuat (strong learner).
+  - Random Forest sangat efektif untuk dataset dengan banyak fitur dan cocok digunakan ketika ada kemungkinan overfitting pada pohon keputusan tunggal.
 2. ⚡ XGBoost
 ```python
 xgb_pipeline = Pipeline([
@@ -183,7 +199,23 @@ xgb_pipeline = Pipeline([
   - `use_label_encoder=False`: Menonaktifkan encoder label bawaan XGBoost.
   - `eval_metric='mlogloss'`: Menggunakan log loss sebagai metrik evaluasi.
   - `random_state=42`: Untuk hasil pelatihan yang konsisten.
+- Penjelasan Cara Kerja XGBoost:
+  - XGBoost (Extreme Gradient Boosting) adalah algoritma machine learning berbasis *boosting* yang efisien dan powerful, dirancang untuk meningkatkan performa dan kecepatan dibandingkan Gradient Boosting tradisional. Berikut adalah cara kerja dan fitur utama XGBoost:
+  - Gradient Boosting: 
+    - Membangun model secara bertahap.
+    - Setiap model baru memperbaiki kesalahan (*error*) dari model sebelumnya.
+    - Meminimalkan *loss function* menggunakan pendekatan gradien.
+  - Ensemble Learning: 
+    - Membentuk banyak pohon keputusan (*decision trees*) secara berurutan.
+    - Setiap pohon fokus mengoreksi kesalahan pohon sebelumnya untuk meningkatkan akurasi.
+  - Regularisasi: 
+    - Menggunakan regularisasi L1 dan L2 untuk mengurangi *overfitting*.
+    - Membantu model lebih general dan stabil.
+  - Optimasi dan Paralelisasi: 
+    - Mendukung pemrosesan paralel saat membangun pohon untuk kecepatan tinggi.
+    - Menyediakan optimasi seperti *pruning* pohon otomatis dan pengelolaan memori efisien.
 
+XGBoost menjadi pilihan utama dalam kompetisi data science karena akurasi tinggi dan fleksibilitasnya dalam menangani berbagai jenis data.
 3.💠 Support Vector Machine (SVM)
 ```python
 from sklearn.pipeline import Pipeline
@@ -203,7 +235,12 @@ svm_pipeline = Pipeline([
   - `C=1.0`: Parameter regulasi; semakin besar nilainya, semakin sedikit toleransi terhadap kesalahan.
   - `gamma='scale'`: Skala otomatis berdasarkan jumlah fitur.
   - `probability=True`: Mengaktifkan estimasi probabilitas kelas.
-
+- Penjelasan Cara Kerja Support Vector Machine:
+  - Random Forest adalah algoritma machine learning yang termasuk ke dalam metode ensemble learning, khususnya teknik bagging (Bootstrap Aggregating). Algoritma ini membangun banyak pohon keputusan (decision trees) pada berbagai subset data pelatihan dan menggabungkan hasilnya (melalui voting untuk klasifikasi) untuk meningkatkan akurasi dan mengurangi overfitting.
+  - Hyperplane: Merupakan batas pemisah antara dua kelas. Tujuan SVM adalah menemukan hyperplane dengan margin maksimum, yaitu jarak terjauh dari hyperplane ke titik data   terdekat dari masing-masing kelas (support vectors).
+  - Margin: Semakin besar margin, semakin baik generalisasi model terhadap data baru.
+  - Kernel Trick: Ketika data tidak bisa dipisahkan secara linear, SVM menggunakan fungsi kernel seperti RBF (Radial Basis Function) untuk memetakan data ke dimensi yang lebih tinggi agar bisa dipisahkan secara linear di sana.
+  - Support Vectors: Titik-titik data yang paling dekat dengan hyperplane. Titik-titik ini sangat berpengaruh dalam menentukan posisi dan orientasi hyperplane.
 
 ## 🔍 Analisis dan Pemilihan Model Terbaik
 
