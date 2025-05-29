@@ -119,7 +119,7 @@ Matriks korelasi di atas menunjukkan hubungan linier antar variabel numerik dala
   - Mungkin disebabkan oleh kondisi suhu yang memengaruhi konsentrasi gas di udara.
 ---
 ## Data Preparation
-Setelah melalui tahap pembersihan data (data cleaning) yang mencakup penanganan missing values dan deteksi outlier, langkah selanjutnya adalah mempersiapkan data untuk proses pelatihan model. Pada tahap ini, dilakukan pemisahan antara fitur dan target variabel. Kolom 'Air Quality' dipilih sebagai target karena merepresentasikan kualitas udara yang ingin diprediksi. Sementara itu, seluruh kolom lainnya digunakan sebagai fitur atau variabel independen yang menjadi input bagi model. Pada kode dibawah juga terdapat encoding terhadap fitur target agar menjadi numerik supaya dapat diproses oleh algoritma
+Setelah melalui tahap pembersihan data (data cleaning) yang mencakup penanganan missing values dan deteksi outlier. Untuk outliernya sendiri itu tidak dilakukan penghapusan karena dalam konteks kualitas udara, outlier ini tidak selalu menunjukkan kesalahan, melainkan bisa menjadi indikasi kejadian penting dan sesudah tadi melihat di bagian EDA jadi diputuskan untuk tidak dihapus berhubungan model yang dibangun juga cukup robust terhadap outlier. Pada tahap ini, dilakukan pemisahan antara fitur dan target variabel. Kolom 'Air Quality' dipilih sebagai target karena merepresentasikan kualitas udara yang ingin diprediksi. Sementara itu, seluruh kolom lainnya digunakan sebagai fitur atau variabel independen yang menjadi input bagi model. Pada kode dibawah juga terdapat encoding terhadap fitur target agar menjadi numerik supaya dapat diproses oleh algoritma
 Pada bagian ini akan dilakukan 2 tahap persiapan data, yaitu:
 1. Encoding Fitur Kategori
    <br>Mengubah data kategorik menjadi numerik agar bisa diproses oleh algoritma machine learning, dalam kasus ini menggunakan Label Encoding. Karena algoritma machine learning pada umumnya hanya dapat memproses data numerik, sehingga untuk memudahkan proses pemodelan, data kategorik harus diencoding.
@@ -136,9 +136,31 @@ Poor → 3
 <br>Proses ini penting agar model machine learning dapat mengenali dan mempelajari pola dari target klasifikasi tersebut.
    <br>![image](img/Data_encodinng.png)
 
-2. Train-Test-Split
+2. Standard Scaler
+ <br> Sebelum data digunakan untuk melatih model, dilakukan proses standardisasi fitur numerik menggunakan StandardScaler.
+Tujuan dari proses ini adalah untuk mengubah distribusi data numerik agar memiliki:
+
+Rata-rata (mean) → 0
+
+Standar deviasi → 1
+
+Hal ini penting karena beberapa algoritma machine learning seperti SVM dan XGBoost sensitif terhadap skala data. Jika tidak dilakukan standardisasi, fitur yang memiliki skala lebih besar bisa mendominasi proses pelatihan dan menyebabkan performa model menurun.
+
+📌 Kenapa StandardScaler dimasukkan ke dalam pipeline?
+Dengan menambahkan StandardScaler ke dalam pipeline, proses standardisasi akan dilakukan otomatis sebelum model dilatih, baik saat training maupun saat prediksi. Ini memastikan:
+
+Proses preprocessing dan modeling berjalan berurutan dan konsisten.
+
+Tidak terjadi data leakage karena scaler hanya belajar dari data latih saat fit().
+
+Kode jadi lebih rapi dan efisien, terutama jika menggunakan model lain yang juga butuh data distandardisasi.
+
+<br>![image](img/Standarisasi_Pada_Pipeline.png)
+
+3. Train-Test-Split
    <br>Dataset dibagi menjadi data latih (train) dan data uji (test) menggunakan train_test_split dari sklearn dengan rasio 80:20. Hal ini dilakukan untuk memisahkan data pada proses pelatihan dan evaluasi model.
    <br>![image](img/Train_test.png)
+
 
 
 ## 🧠 Modeling
@@ -236,7 +258,7 @@ svm_pipeline = Pipeline([
   - `gamma='scale'`: Skala otomatis berdasarkan jumlah fitur.
   - `probability=True`: Mengaktifkan estimasi probabilitas kelas.
 - Penjelasan Cara Kerja Support Vector Machine:
-  - Random Forest adalah algoritma machine learning yang termasuk ke dalam metode ensemble learning, khususnya teknik bagging (Bootstrap Aggregating). Algoritma ini membangun banyak pohon keputusan (decision trees) pada berbagai subset data pelatihan dan menggabungkan hasilnya (melalui voting untuk klasifikasi) untuk meningkatkan akurasi dan mengurangi overfitting.
+  - Support Vector Machine (SVM) adalah algoritma klasifikasi yang bekerja dengan mencari hyperplane terbaik yang memisahkan data ke dalam kelas-kelas yang berbeda.
   - Hyperplane: Merupakan batas pemisah antara dua kelas. Tujuan SVM adalah menemukan hyperplane dengan margin maksimum, yaitu jarak terjauh dari hyperplane ke titik data   terdekat dari masing-masing kelas (support vectors).
   - Margin: Semakin besar margin, semakin baik generalisasi model terhadap data baru.
   - Kernel Trick: Ketika data tidak bisa dipisahkan secara linear, SVM menggunakan fungsi kernel seperti RBF (Radial Basis Function) untuk memetakan data ke dimensi yang lebih tinggi agar bisa dipisahkan secara linear di sana.
